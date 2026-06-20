@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Analisis Kesegaran Daging</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background: #f8f9fa; }
+        .card-header { display:flex; flex-direction:column; }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="card shadow">
+            <div class="card-header bg-danger text-white">
+                <h2 class="mb-1">Sistem Analisis Kesegaran Daging</h2>
+                <p class="mb-0">Analisis warna, tekstur, dan bentuk menggunakan Pengolahan Citra Digital.</p>
+            </div>
+            <div class="card-body">
+                {% if error %}
+                <div class="alert alert-danger">{{ error }}</div>
+                {% endif %}
+
+                <form id="uploadForm" method="POST" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label class="form-label">Pilih gambar daging (maks 5 MB)</label>
+                        <input id="imageInput" type="file" name="image" class="form-control" accept="image/*" required>
+                    </div>
+
+                    <div id="previewContainer" class="mb-3" style="display:none;">
+                        <label class="form-label">Preview:</label>
+                        <div>
+                            <img id="preview" src="#" class="img-fluid rounded" style="max-width:320px;" alt="Preview" />
+                        </div>
+                    </div>
+
+                    <button id="submitBtn" type="submit" class="btn btn-danger">
+                        <span id="btnText">Analisis</span>
+                        <span id="btnSpinner" class="spinner-border spinner-border-sm ms-2" role="status" aria-hidden="true" style="display:none;"></span>
+                    </button>
+                </form>
+
+                {% if result %}
+                <hr>
+                <div class="row">
+                    <div class="col-md-5">
+                        <img src="{{ url_for('static', filename='uploads/' + result.filename) }}" class="img-fluid rounded mb-3" alt="Gambar Daging">
+                    </div>
+                    <div class="col-md-7">
+                        <h4>Hasil Analisis</h4>
+                        <table class="table table-bordered">
+                            <tbody>
+                                <tr><th>R</th><td>{{ result.r }}</td></tr>
+                                <tr><th>G</th><td>{{ result.g }}</td></tr>
+                                <tr><th>B</th><td>{{ result.b }}</td></tr>
+                                <tr><th>Hue</th><td>{{ result.h }}</td></tr>
+                                <tr><th>Saturation</th><td>{{ result.s }}</td></tr>
+                                <tr><th>Value</th><td>{{ result.v }}</td></tr>
+                                <tr><th>Contrast</th><td>{{ result.contrast }}</td></tr>
+                                <tr><th>Homogeneity</th><td>{{ result.homogeneity }}</td></tr>
+                                <tr><th>Energy</th><td>{{ result.energy }}</td></tr>
+                                <tr><th>Lab L</th><td>{{ result.l_lab }}</td></tr>
+                                <tr><th>Lab a</th><td>{{ result.a_lab }}</td></tr>
+                                <tr><th>Lab b</th><td>{{ result.b_lab }}</td></tr>
+                                <tr><th>Mean LBP</th><td>{{ result.mean_lbp }}</td></tr>
+                                <tr><th>LBP Uniform Prop</th><td>{{ result.uniform_lbp }}</td></tr>
+                                <tr><th>Gabor Energy</th><td>{{ result.gabor_energy }}</td></tr>
+                                <tr><th>Area</th><td>{{ result.area }}</td></tr>
+                                <tr><th>Perimeter</th><td>{{ result.perimeter }}</td></tr>
+                                <tr><th>Compactness</th><td>{{ result.compactness }}</td></tr>
+                                <tr><th>Bounding Box</th><td>{{ result.bbox }}</td></tr>
+                                <tr><th>Aspect Ratio</th><td>{{ result.aspect_ratio }}</td></tr>
+                                <tr><th>Convexity</th><td>{{ result.convexity }}</td></tr>
+                                <tr><th>Roundness</th><td>{{ result.roundness }}</td></tr>
+                                <tr><th>Blob Count</th><td>{{ result.blob_count }}</td></tr>
+                                <tr><th>Mean Blob Area</th><td>{{ result.mean_blob_area }}</td></tr>
+                                <tr><th>Status</th><td><strong>{{ result.status }}</strong></td></tr>
+                            </tbody>
+                        </table>
+                        <div class="alert alert-secondary">
+                            <h5>Penjelasan Analisis</h5>
+                            <ul class="mb-0">
+                                {% for line in result.explanation %}
+                                <li>{{ line }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <script>
+        const imageInput = document.getElementById('imageInput');
+        const preview = document.getElementById('preview');
+        const previewContainer = document.getElementById('previewContainer');
+        const uploadForm = document.getElementById('uploadForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const btnSpinner = document.getElementById('btnSpinner');
+
+        imageInput && imageInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            if (file.size > 5 * 1024 * 1024) {
+                alert('File terlalu besar (maks 5 MB).');
+                imageInput.value = '';
+                previewContainer.style.display = 'none';
+                return;
+            }
+            const url = URL.createObjectURL(file);
+            preview.src = url;
+            previewContainer.style.display = 'block';
+        });
+
+        uploadForm && uploadForm.addEventListener('submit', () => {
+            submitBtn.disabled = true;
+            btnSpinner.style.display = 'inline-block';
+        });
+    </script>
+</body>
+</html>
