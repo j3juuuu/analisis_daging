@@ -3,3 +3,6 @@ numpy
 Pillow
 gunicorn
 werkzeug
+opencv-python
+scikit-image
+scipy
