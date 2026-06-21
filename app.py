@@ -10,7 +10,12 @@ from skimage.filters import gabor_kernel
 from scipy import ndimage as ndi
 import io
 
-app = Flask(__name__)
+# Get the directory where this app.py is located
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+app = Flask(__name__, 
+            template_folder=os.path.join(BASE_DIR, 'templates'),
+            static_folder=os.path.join(BASE_DIR, 'static'))
 
 UPLOAD_FOLDER = "static/uploads"
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
