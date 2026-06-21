@@ -1,6 +1,1 @@
 flask
-numpy
-opencv-python
-scipy
-scikit-image
-werkzeug
