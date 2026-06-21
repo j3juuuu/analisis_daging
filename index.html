@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>Analisis Daging</h2>
+
+<button onclick="test()">Test API</button>
+
+<p id="hasil"></p>
+
+<script>
+async function test() {
+    const res = await fetch("/api");
+    const data = await res.json();
+
+    document.getElementById("hasil").innerText =
+        data.status;
+}
+</script>
+
+</body>
+</html>
