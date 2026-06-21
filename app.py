@@ -5,9 +5,6 @@ from PIL import Image
 import numpy as np
 import os
 import math
-from skimage.feature import local_binary_pattern
-from skimage.filters import gabor_kernel
-from scipy import ndimage as ndi
 import io
 
 # Get the directory where this app.py is located
@@ -64,10 +61,42 @@ def compute_glcm_features(gray, levels=16):
     return float(contrast), float(homogeneity), float(energy)
 
 
-def compute_lbp(gray, P=8, R=1):
-    lbp = local_binary_pattern(gray, P, R, method='uniform')
-    mean_lbp = float(lbp.mean())
-    return mean_lbp
+def compute_lbp(gray):
+    if gray.shape[0] < 3 or gray.shape[1] < 3:
+        return float(gray.mean())
+
+    center = gray[1:-1, 1:-1]
+    neighbors = [
+        gray[:-2, 1:-1],
+        gray[:-2, 2:],
+        gray[1:-1, 2:],
+        gray[2:, 2:],
+        gray[2:, 1:-1],
+        gray[2:, :-2],
+        gray[1:-1, :-2],
+        gray[:-2, :-2],
+    ]
+
+    lbp = np.zeros_like(center, dtype=np.uint8)
+    for i, neigh in enumerate(neighbors):
+        lbp |= ((neigh >= center).astype(np.uint8) << i)
+
+    return float(lbp.mean())
+
+
+def convolve2d(image, kernel):
+    ih, iw = image.shape
+    kh, kw = kernel.shape
+    pad_h, pad_w = kh // 2, kw // 2
+    padded = np.pad(image, ((pad_h, pad_h), (pad_w, pad_w)), mode='reflect')
+    result = np.zeros((ih, iw), dtype=np.float32)
+
+    for y in range(ih):
+        for x in range(iw):
+            region = padded[y:y + kh, x:x + kw]
+            result[y, x] = np.sum(region * kernel)
+
+    return result
 
 
 def compute_gabor(gray):
@@ -75,9 +104,24 @@ def compute_gabor(gray):
     energies = []
 
     for freq in (0.1, 0.2):
-        for theta in (0, np.pi/4, np.pi/2, 3*np.pi/4):
-            kernel = np.real(gabor_kernel(freq, theta=theta))
-            filtered = ndi.convolve(gray, kernel, mode='reflect')
+        sigma = 1.0 / freq
+        gamma = 0.5
+        psi = 0
+        for theta in (0, np.pi / 4, np.pi / 2, 3 * np.pi / 4):
+            size = int(8 * sigma)
+            if size % 2 == 0:
+                size += 1
+
+            ax = np.arange(-size, size + 1, dtype=np.float32)
+            xx, yy = np.meshgrid(ax, ax)
+            x_theta = xx * np.cos(theta) + yy * np.sin(theta)
+            y_theta = -xx * np.sin(theta) + yy * np.cos(theta)
+
+            kernel = np.exp(-0.5 * (x_theta**2 + (gamma**2) * y_theta**2) / (sigma**2))
+            kernel *= np.cos(2 * math.pi * freq * x_theta + psi)
+            kernel /= np.sum(np.abs(kernel)) + 1e-8
+
+            filtered = convolve2d(gray, kernel)
             energies.append(np.mean(np.abs(filtered)))
 
     return float(np.mean(energies)) if energies else 0.0

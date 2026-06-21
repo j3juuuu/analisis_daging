@@ -1,6 +1,4 @@
 flask
 numpy
 Pillow
-scipy
-scikit-image
 werkzeug
