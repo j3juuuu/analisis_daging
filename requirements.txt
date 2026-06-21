@@ -1,6 +1,6 @@
 flask
 numpy
-opencv-python-headless
+Pillow
 scipy
 scikit-image
 werkzeug

@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request
 from werkzeug.utils import secure_filename
 from werkzeug.exceptions import RequestEntityTooLarge
-import cv2
+from PIL import Image
 import numpy as np
 import os
 import math
@@ -100,14 +100,14 @@ def index():
             error = "Pilih gambar dulu"
         else:
             try:
-                # Read image directly from memory (for Vercel compatibility)
-                file_bytes = np.frombuffer(file.read(), np.uint8)
-                img = cv2.imdecode(file_bytes, cv2.IMREAD_COLOR)
+                # Read image directly from memory using Pillow for Vercel
+                image = Image.open(file.stream).convert('RGB')
+                img = np.array(image)
 
-                if img is None:
+                if img is None or img.size == 0:
                     error = "Gagal membaca gambar"
                 else:
-                    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+                    gray = np.dot(img[..., :3], [0.2989, 0.5870, 0.1140]).astype(np.uint8)
 
                     contrast, homogeneity, energy = compute_glcm_features(gray)
                     mean_lbp = compute_lbp(gray)
