@@ -32,7 +32,3 @@ def index():
             }
 
     return render_template("index.html", result=result, error=error)
-
-
-# penting untuk Vercel
-application = app
