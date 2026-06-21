@@ -32,6 +32,9 @@ def home():
 
 @app.route("/predict", methods=["POST"])
 def predict():
+    if "image" not in request.files:
+        return render_template("index.html", prediction="Tidak ada gambar")
+
     file = request.files["image"]
     image = Image.open(file.stream).convert("RGB")
 
@@ -40,6 +43,5 @@ def predict():
     return render_template("index.html", prediction=result)
 
 
-# INI WAJIB DI VERCEL
 def handler(environ, start_response):
     return app(environ, start_response)
