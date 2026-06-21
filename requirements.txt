@@ -1,5 +1,1 @@
 flask
-numpy
-opencv-python-headless
-scipy
-scikit-image
