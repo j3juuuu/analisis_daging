@@ -1,73 +1,10 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Analisis Kesegaran Daging</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+{% if error %}
+<div class="alert alert-danger">{{ error }}</div>
+{% endif %}
 
-    <style>
-        body { background: #f8f9fa; }
-        .card-header { display: flex; flex-direction: column; }
-        img { max-width: 100%; }
-    </style>
-</head>
-
-<body>
-<div class="container mt-5">
-    <div class="card shadow">
-
-        <!-- HEADER -->
-        <div class="card-header bg-danger text-white">
-            <h3>Sistem Analisis Kesegaran Daging</h3>
-            <small>Analisis warna, tekstur, dan bentuk menggunakan Pengolahan Citra Digital</small>
-        </div>
-
-        <div class="card-body">
-
-            <!-- ERROR -->
-            {% if error %}
-            <div class="alert alert-danger">{{ error }}</div>
-            {% endif %}
-
-            <!-- FORM UPLOAD -->
-            <form method="POST" enctype="multipart/form-data">
-                <div class="mb-3">
-                    <label class="form-label">Upload gambar (maks 5MB)</label>
-                    <input type="file" name="image" class="form-control" accept="image/*" required>
-                </div>
-
-                <button type="submit" class="btn btn-danger">
-                    Analisis
-                </button>
-            </form>
-
-            <!-- HASIL -->
-            {% if result %}
-            <hr>
-
-            <div class="row mt-3">
-                <div class="col-md-5">
-                    <img src="{{ url_for('static', filename='uploads/' + result.filename) }}" class="img-fluid rounded">
-                </div>
-
-                <div class="col-md-7">
-                    <h4>Hasil Analisis</h4>
-
-                    <table class="table table-bordered">
-                        <tr><th>Contrast</th><td>{{ result.contrast }}</td></tr>
-                        <tr><th>Homogeneity</th><td>{{ result.homogeneity }}</td></tr>
-                        <tr><th>Energy</th><td>{{ result.energy }}</td></tr>
-                        <tr><th>LBP</th><td>{{ result.lbp }}</td></tr>
-                        <tr><th>Gabor</th><td>{{ result.gabor }}</td></tr>
-                    </table>
-
-                </div>
-            </div>
-            {% endif %}
-
-        </div>
-    </div>
+{% if result %}
+<div class="alert alert-success">
+    <p>{{ result.status }}</p>
+    <p>{{ result.filename }}</p>
 </div>
-</body>
-</html>
+{% endif %}
