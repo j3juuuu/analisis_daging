@@ -3,11 +3,21 @@ import cv2
 import numpy as np
 import math
 import base64
+import os
 from skimage.feature import local_binary_pattern
 from skimage.filters import gabor_kernel
 from scipy import ndimage as ndi
 
-app = Flask(__name__)
+# Get the directory where this app.py is located
+base_dir = os.path.dirname(os.path.abspath(__file__))
+
+# Create Flask app with explicit template and static folders
+app = Flask(
+    __name__,
+    template_folder=os.path.join(base_dir, 'templates'),
+    static_folder=os.path.join(base_dir, 'static'),
+    static_url_path='/static'
+)
 
 # =========================
 # GLCM FEATURE
