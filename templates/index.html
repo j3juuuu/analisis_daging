@@ -2,31 +2,25 @@
 <html>
 <head>
     <title>Analisis Daging</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
+
 <body>
+<div class="container">
 
-<h2>Upload Gambar</h2>
+    <h1>Analisis Kesegaran Daging 🥩</h1>
 
-<form method="POST" enctype="multipart/form-data">
-    <input type="file" name="image">
-    <button type="submit">Analisis</button>
-</form>
+    <form action="/predict" method="POST" enctype="multipart/form-data">
+        <input type="file" name="image" required>
+        <button type="submit">Analisis</button>
+    </form>
 
-{% if result %}
-    <h3>Status: {{ result.status }}</h3>
-    <p>Score: {{ result.score }}</p>
+    {% if prediction %}
+        <div class="result">
+            Hasil: {{ prediction }}
+        </div>
+    {% endif %}
 
-    <h4>Penjelasan:</h4>
-    <ul>
-    {% for e in result.explanation %}
-        <li>{{ e }}</li>
-    {% endfor %}
-    </ul>
-{% endif %}
-
-{% if error %}
-    <p style="color:red">{{ error }}</p>
-{% endif %}
-
+</div>
 </body>
 </html>
