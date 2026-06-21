@@ -1,5 +1,9 @@
+import json
+
 def handler(request):
-    if request.method == "GET":
-        return {
+    return {
+        "statusCode": 200,
+        "body": json.dumps({
             "status": "API jalan"
-        }
+        })
+    }
