@@ -1,0 +1,81 @@
+/* ===== GLOBAL STYLE ===== */
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* ===== CONTAINER ===== */
+.container {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+/* ===== TITLE ===== */
+h1 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* ===== FORM ===== */
+input[type="file"] {
+    margin: 15px 0;
+    padding: 10px;
+    border: 2px dashed #aaa;
+    border-radius: 10px;
+    width: 100%;
+    cursor: pointer;
+}
+
+/* ===== BUTTON ===== */
+button {
+    background: #4CAF50;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.3s;
+    width: 100%;
+}
+
+button:hover {
+    background: #45a049;
+    transform: scale(1.02);
+}
+
+/* ===== RESULT BOX ===== */
+.result {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+/* status warna */
+.segar {
+    background: #d4edda;
+    color: #155724;
+}
+
+.kurang-segar {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.tidak-segar {
+    background: #f8d7da;
+    color: #721c24;
+}
