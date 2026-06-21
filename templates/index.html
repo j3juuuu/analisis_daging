@@ -1,26 +1,4 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Analisis Daging</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-
-<body>
-<div class="container">
-
-    <h1>Analisis Kesegaran Daging 🥩</h1>
-
-    <form action="/predict" method="POST" enctype="multipart/form-data">
-        <input type="file" name="image" required>
-        <button type="submit">Analisis</button>
-    </form>
-
-    {% if prediction %}
-        <div class="result">
-            {{ prediction }}
-        </div>
-    {% endif %}
-
-</div>
-</body>
-</html>
+<form action="/predict" method="POST" enctype="multipart/form-data">
+    <input type="file" name="image" required>
+    <button type="submit">Analisis</button>
+</form>
