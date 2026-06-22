@@ -3,16 +3,7 @@
   "builds": [
     {
       "src": "api/index.py",
-      "use": "@vercel/python@3.8.3",
-      "config": {
-        "pythonVersion": "3.11",
-        "handlers": [
-          {
-            "src": "api/index.py",
-            "runtime": "python3.11"
-          }
-        ]
-      }
+      "use": "@vercel/python"
     }
   ],
   "routes": [
@@ -20,8 +11,5 @@
       "src": "/(.*)",
       "dest": "api/index.py"
     }
-  ],
-  "env": {
-    "PYTHONUNBUFFERED": "1"
-  }
+  ]
 }
