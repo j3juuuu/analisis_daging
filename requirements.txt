@@ -1,5 +1,4 @@
 flask
 numpy
-opencv-python-headless
+opencv-python
 scikit-image
-pillow
