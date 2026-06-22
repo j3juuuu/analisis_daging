@@ -1,332 +1,290 @@
 <!DOCTYPE html>
+
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analisis Daging</title>
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        body {
-            margin: 0;
-            min-height: 100vh;
-            font-family: Arial, sans-serif;
-            color: #3f2431;
-            background:
-                radial-gradient(circle at top left, rgba(255, 196, 215, 0.95), transparent 34%),
-                linear-gradient(135deg, #fff4f8 0%, #ffe0ec 45%, #ffd4e4 100%);
-        }
+<title>Analisis Kualitas Daging</title>
 
-        main {
-            width: min(1120px, calc(100% - 32px));
-            margin: 0 auto;
-            padding: 36px 0;
-        }
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-        .hero {
-            display: grid;
-            grid-template-columns: minmax(0, 0.9fr) minmax(320px, 1.1fr);
-            gap: 24px;
-            align-items: stretch;
-        }
+<style>
 
-        .intro,
-        .upload-card,
-        .result-card,
-        .image-card {
-            border: 1px solid rgba(214, 82, 129, 0.22);
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.9);
-            box-shadow: 0 18px 45px rgba(189, 74, 116, 0.14);
-        }
+body{
+    background:#f4f6f9;
+}
 
-        .intro {
-            padding: 28px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
+.hero{
+    background:linear-gradient(135deg,#c62828,#e53935);
+    color:white;
+    padding:40px;
+    border-radius:20px;
+    margin-bottom:25px;
+}
 
-        .eyebrow {
-            margin: 0 0 10px;
-            color: #b83268;
-            font-size: 13px;
-            font-weight: 700;
-            letter-spacing: 0;
-            text-transform: uppercase;
-        }
+.card{
+    border:none;
+    border-radius:20px;
+    box-shadow:0 5px 20px rgba(0,0,0,.08);
+}
 
-        h1 {
-            margin: 0;
-            font-size: 40px;
-            line-height: 1.08;
-            color: #6f1d46;
-        }
+.metric{
+    font-size:24px;
+    font-weight:bold;
+}
 
-        .intro p {
-            margin: 16px 0 0;
-            color: #704254;
-            line-height: 1.7;
-        }
+.result{
+    font-size:32px;
+    font-weight:bold;
+}
 
-        .upload-card {
-            padding: 22px;
-        }
+.chart-img{
+    width:100%;
+    border-radius:15px;
+}
 
-        form {
-            display: grid;
-            gap: 16px;
-        }
+</style>
 
-        .dropzone {
-            position: relative;
-            display: grid;
-            place-items: center;
-            min-height: 330px;
-            overflow: hidden;
-            border: 2px dashed #e16d9b;
-            border-radius: 8px;
-            background: #fff8fb;
-            cursor: pointer;
-        }
-
-        .dropzone input {
-            position: absolute;
-            inset: 0;
-            opacity: 0;
-            cursor: pointer;
-        }
-
-        .placeholder {
-            padding: 28px;
-            text-align: center;
-            color: #8b4963;
-        }
-
-        .placeholder strong {
-            display: block;
-            margin-bottom: 8px;
-            color: #8f1f54;
-            font-size: 22px;
-        }
-
-        .placeholder span {
-            display: block;
-            line-height: 1.5;
-        }
-
-        .preview {
-            width: 100%;
-            height: 100%;
-            min-height: 330px;
-            object-fit: contain;
-            background: #fff;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        button {
-            width: 100%;
-            border: 0;
-            border-radius: 8px;
-            padding: 14px 18px;
-            color: #ffffff;
-            background: linear-gradient(135deg, #d63384, #ff6fae);
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            box-shadow: 0 12px 24px rgba(214, 51, 132, 0.25);
-        }
-
-        .final {
-            margin: 24px 0;
-            padding: 18px 20px;
-            border-radius: 8px;
-            background: #8f1f54;
-            color: #ffffff;
-            box-shadow: 0 16px 36px rgba(143, 31, 84, 0.22);
-        }
-
-        .final h2 {
-            margin: 0;
-            font-size: 26px;
-        }
-
-        .final p {
-            margin: 8px 0 0;
-            color: #ffe6f0;
-        }
-
-        .content-grid {
-            display: grid;
-            grid-template-columns: 0.9fr 1.3fr;
-            gap: 18px;
-            align-items: start;
-            margin-top: 24px;
-        }
-
-        .image-card,
-        .result-card {
-            padding: 18px;
-        }
-
-        .image-card h3,
-        .result-card h3 {
-            margin: 0 0 14px;
-            color: #6f1d46;
-        }
-
-        .uploaded-image {
-            width: 100%;
-            max-height: 460px;
-            object-fit: contain;
-            border-radius: 8px;
-            background: #fff8fb;
-            border: 1px solid #f4bdd3;
-        }
-
-        .result-grid {
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 14px;
-        }
-
-        .metric {
-            display: flex;
-            justify-content: space-between;
-            gap: 12px;
-            padding: 9px 0;
-            border-bottom: 1px solid #f7d4e2;
-        }
-
-        .metric:last-child {
-            border-bottom: 0;
-        }
-
-        .label {
-            color: #7c5264;
-        }
-
-        .value {
-            color: #4d1731;
-            font-weight: 700;
-            text-align: right;
-        }
-
-        .note {
-            margin: 12px 0 0;
-            color: #704254;
-            line-height: 1.5;
-        }
-
-        @media (max-width: 920px) {
-            .hero,
-            .content-grid,
-            .result-grid {
-                grid-template-columns: 1fr;
-            }
-
-            h1 {
-                font-size: 32px;
-            }
-        }
-    </style>
 </head>
 <body>
-<main>
-    <section class="hero">
-        <div class="intro">
-            <p class="eyebrow">Pengolahan Citra Digital</p>
-            <h1>Analisis Kematangan Daging</h1>
-            <p>Upload gambar daging, lalu sistem akan membaca warna, tekstur, bentuk, dan bercak untuk membantu menentukan tingkat kematangan.</p>
-        </div>
 
-        <div class="upload-card">
-            <form action="/upload" method="post" enctype="multipart/form-data">
-                <label class="dropzone" for="imageInput">
-                    <input id="imageInput" type="file" name="image" accept="image/*" required>
-                    <img id="previewImage" class="preview {% if not uploaded_image %}hidden{% endif %}" src="{% if uploaded_image %}{{ uploaded_image }}{% endif %}" alt="Preview gambar daging">
-                    <span id="placeholder" class="placeholder {% if uploaded_image %}hidden{% endif %}">
-                        <strong>Taruh gambar di sini</strong>
-                        <span>Klik area pink ini untuk memilih foto daging dari perangkat kamu.</span>
-                    </span>
-                </label>
-                <button type="submit">Analisis Gambar</button>
-            </form>
-        </div>
-    </section>
+<div class="container py-4">
 
-    {% if final %}
-    <section class="final">
-        <h2>Hasil Akhir: {{ final }}</h2>
-        <p>Gambar tetap ditampilkan supaya hasil analisis mudah dibandingkan dengan foto aslinya.</p>
-    </section>
+<div class="hero text-center">
 
-    <section class="content-grid">
-        <div class="image-card">
-            <h3>Gambar yang Dianalisis</h3>
-            <img class="uploaded-image" src="{{ uploaded_image }}" alt="Gambar daging yang dianalisis">
-        </div>
+<h1>🥩 Analisis Kualitas Daging</h1>
 
-        <div class="result-grid">
-            <div class="result-card">
-                <h3>Warna</h3>
-                <div class="metric"><span class="label">RGB rata-rata</span><span class="value">R {{ color.rgb.r }}, G {{ color.rgb.g }}, B {{ color.rgb.b }}</span></div>
-                <div class="metric"><span class="label">Hue</span><span class="value">{{ color.hsv.h }} derajat</span></div>
-                <div class="metric"><span class="label">Saturation</span><span class="value">{{ color.hsv.s }}%</span></div>
-                <div class="metric"><span class="label">Brightness</span><span class="value">{{ color.hsv.v }}%</span></div>
-                <div class="metric"><span class="label">Lab*</span><span class="value">L {{ color.lab.l }}, a {{ color.lab.a }}, b {{ color.lab.b }}</span></div>
-                <div class="metric"><span class="label">Status</span><span class="value">{{ color.state }}</span></div>
-                <p class="note">{{ color.saturation_status }}. {{ color.brightness_status }}.</p>
-            </div>
+<p>
+Analisis Warna, Tekstur, dan Bentuk Menggunakan Computer Vision
+</p>
 
-            <div class="result-card">
-                <h3>Tekstur</h3>
-                <div class="metric"><span class="label">GLCM Contrast</span><span class="value">{{ texture.contrast }}</span></div>
-                <div class="metric"><span class="label">Homogeneity</span><span class="value">{{ texture.homogeneity }}</span></div>
-                <div class="metric"><span class="label">Energy</span><span class="value">{{ texture.energy }}</span></div>
-                <div class="metric"><span class="label">LBP</span><span class="value">{{ texture.lbp }}</span></div>
-                <div class="metric"><span class="label">Gabor</span><span class="value">{{ texture.gabor }}</span></div>
-                <div class="metric"><span class="label">Status</span><span class="value">{{ texture.state }}</span></div>
-                <p class="note">{{ texture.surface_status }}</p>
-            </div>
+</div>
 
-            <div class="result-card">
-                <h3>Bentuk</h3>
-                <div class="metric"><span class="label">Bounding box</span><span class="value">{{ shape.bounding_box.width }} x {{ shape.bounding_box.height }} px</span></div>
-                <div class="metric"><span class="label">Aspect ratio</span><span class="value">{{ shape.aspect_ratio }}</span></div>
-                <div class="metric"><span class="label">Area</span><span class="value">{{ shape.area }} px</span></div>
-                <div class="metric"><span class="label">Perimeter</span><span class="value">{{ shape.perimeter }} px</span></div>
-                <div class="metric"><span class="label">Convexity</span><span class="value">{{ shape.convexity }}</span></div>
-                <div class="metric"><span class="label">Roundness</span><span class="value">{{ shape.roundness }}</span></div>
-                <div class="metric"><span class="label">Blob bercak</span><span class="value">{{ shape.blob_count }}</span></div>
-                <div class="metric"><span class="label">Status</span><span class="value">{{ shape.state }}</span></div>
-                <p class="note">{{ shape.shape_status }}. {{ shape.stain_status }}.</p>
-            </div>
-        </div>
-    </section>
-    {% endif %}
-</main>
+<div class="card p-4 mb-4">
 
-<script>
-    const input = document.getElementById("imageInput");
-    const preview = document.getElementById("previewImage");
-    const placeholder = document.getElementById("placeholder");
+<form action="/upload" method="post" enctype="multipart/form-data">
 
-    input.addEventListener("change", function () {
-        const file = input.files[0];
-        if (!file) {
-            return;
-        }
+<div class="mb-3">
 
-        preview.src = URL.createObjectURL(file);
-        preview.classList.remove("hidden");
-        placeholder.classList.add("hidden");
-    });
-</script>
+<label class="form-label">
+Upload Gambar Daging
+</label>
+
+<input
+type="file"
+name="image"
+class="form-control"
+required>
+
+</div>
+
+<button class="btn btn-danger">
+Analisis
+</button>
+
+</form>
+
+</div>
+
+{% if final %}
+
+<div class="card p-4 mb-4 text-center">
+
+<h2>Hasil Analisis</h2>
+
+<div class="result text-danger">
+{{ final }}
+</div>
+
+{% if color.maturity %}
+
+<div class="mt-4">
+
+<label>Tingkat Kematangan</label>
+
+<div class="progress">
+
+<div
+class="progress-bar"
+role="progressbar"
+style="width: {{ color.maturity }}%;">
+
+{{ color.maturity }}%
+
+</div>
+
+</div>
+
+</div>
+
+{% endif %}
+
+</div>
+
+<div class="row">
+
+<div class="col-md-4 mb-4">
+
+<div class="card p-4 h-100">
+
+<h4>🎨 Analisis Warna</h4>
+
+<hr>
+
+<p>Hue</p>
+<div class="metric">{{ color.h }}</div>
+
+<p class="mt-3">Saturation</p>
+<div class="metric">{{ color.s }}</div>
+
+<p class="mt-3">Value</p>
+<div class="metric">{{ color.v }}</div>
+
+<hr>
+
+<p>RGB Mean</p>
+
+<ul>
+<li>R : {{ color.rgb_r }}</li>
+<li>G : {{ color.rgb_g }}</li>
+<li>B : {{ color.rgb_b }}</li>
+</ul>
+
+<p>LAB Mean</p>
+
+<ul>
+<li>L : {{ color.lab_l }}</li>
+<li>A : {{ color.lab_a }}</li>
+<li>B : {{ color.lab_b }}</li>
+</ul>
+
+<span class="badge bg-primary">
+{{ color.state }}
+</span>
+
+</div>
+
+</div>
+
+<div class="col-md-4 mb-4">
+
+<div class="card p-4 h-100">
+
+<h4>🧩 Analisis Tekstur</h4>
+
+<hr>
+
+<p>Contrast</p>
+<div class="metric">
+{{ texture.contrast }}
+</div>
+
+<p class="mt-3">Homogeneity</p>
+<div class="metric">
+{{ texture.homogeneity }}
+</div>
+
+<p class="mt-3">Energy</p>
+<div class="metric">
+{{ texture.energy }}
+</div>
+
+<p class="mt-3">LBP</p>
+<div class="metric">
+{{ texture.lbp }}
+</div>
+
+<span class="badge bg-success mt-3">
+{{ texture.state }}
+</span>
+
+</div>
+
+</div>
+
+<div class="col-md-4 mb-4">
+
+<div class="card p-4 h-100">
+
+<h4>📐 Analisis Bentuk</h4>
+
+<hr>
+
+<p>Area</p>
+<div class="metric">
+{{ shape.area }}
+</div>
+
+<p class="mt-3">Perimeter</p>
+<div class="metric">
+{{ shape.perimeter }}
+</div>
+
+<p class="mt-3">Aspect Ratio</p>
+<div class="metric">
+{{ shape.aspect_ratio }}
+</div>
+
+<p class="mt-3">Convexity</p>
+<div class="metric">
+{{ shape.convexity }}
+</div>
+
+<p class="mt-3">Roundness</p>
+<div class="metric">
+{{ shape.roundness }}
+</div>
+
+<span class="badge bg-warning text-dark mt-3">
+{{ shape.state }}
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+{% if rgb_chart or hsv_chart %}
+
+<div class="row">
+
+<div class="col-md-6 mb-4">
+
+<div class="card p-4">
+
+<h4>RGB Histogram</h4>
+
+<img
+src="{{ url_for('static', filename=rgb_chart) }}"
+class="chart-img">
+
+</div>
+
+</div>
+
+<div class="col-md-6 mb-4">
+
+<div class="card p-4">
+
+<h4>HSV Histogram</h4>
+
+<img
+src="{{ url_for('static', filename=hsv_chart) }}"
+class="chart-img">
+
+</div>
+
+</div>
+
+</div>
+
+{% endif %}
+
+{% endif %}
+
+</div>
+
 </body>
 </html>
